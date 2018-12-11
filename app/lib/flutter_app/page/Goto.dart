@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:app/flutter_app/MainPage.dart';
-void main() => runApp(new MyApp());
 
-class MyApp extends StatelessWidget {
+class Goto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -10,7 +8,10 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainPage(),
+      debugShowCheckedModeBanner: false,
+      home: new Scaffold(
+        body: new Center(child:new Text("这里is  goto")),
+      ),
     );
   }
 }
