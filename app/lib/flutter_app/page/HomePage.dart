@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:app/utils/HttpUtil.dart';
+// import 'package:app/flutter_app/data_url/user.dart';
 Dio dio = new Dio();
 
 class HomePage extends StatefulWidget {
@@ -28,7 +29,6 @@ class HomeState extends State<HomePage> {
     var response = await dio.get("http://www.wanandroid.com/project/list/1/json?cid=1");
 
     var  newDate =response.data;
-    // print(newDate);
      newDate = newDate;
       setState(() {
         Listdata = newDate;
@@ -36,43 +36,44 @@ class HomeState extends State<HomePage> {
   }
 
 
-
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
+    var item = Listdata['data']['datas'];
     // TODO: implement build
+    print(item.length);
     return new Scaffold(
-      body: new ListView.builder(
-        itemBuilder:(BuildContext context, int index){
-          return _getItems();
+      body:item.length<=0? new Center(child: Text('meiyoushuju'),):new ListView.builder(
+        itemCount:item.length ,
+        itemBuilder:( context, index){
+        //  return _getItem();
+        var item_list=item[index];
+            return new Row(children: <Widget>[
+      new Flexible(
+          flex: 1,
+          fit: FlexFit.tight, //和android的weight=1效果一样
+          child: new Stack(children: <Widget>[
+            new Column(children: <Widget>[
+              new Text("${item_list["title"]}".trim(),
+                  style: new TextStyle(color: Colors.black, fontSize: 20.0,),
+                  textAlign: TextAlign.left),
+              new Text("${item_list["desc"]}", maxLines: 3,)
+            ],)
+          ],)
+      ),
+      new ClipRect(child: new FadeInImage.assetNetwork(
+        placeholder: "images/ic_shop_normal.png",
+        image: "${item_list['envelopePic']}",
+        width: 50.0,
+        height: 50.0,
+        fit: BoxFit.fitWidth,),),
+    ],);
         }
           ),
       // body: new Text("$Listdata",style: TextStyle(fontSize: 12.0),),
     );
   }
-  _getItems () {
-    String str="ABCDER";
-    str.split(',').map((item){
-      return new Text(item);
-    });
-  }
 
-    List<dynamic> _getItem() {
-     var datalist = Listdata["data"]["datas"];
-    return datalist.map((item) {
-      return new Card(child: new Padding(
-        padding: const EdgeInsets.all(10.0), child: _getRowWidget(item),),
-        elevation: 3.0,
-        margin: const EdgeInsets.all(10.0),);
-    }).toList();
-  }
-  
+     
  
   Widget _getRowWidget(item) {
     return new Row(children: <Widget>[
