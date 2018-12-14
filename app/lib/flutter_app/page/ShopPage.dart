@@ -20,12 +20,11 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
+    _getMore();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==_scrollController.position.maxScrollExtent) {
         print('滑动到了最底部');
         _getMore();
       }
@@ -47,26 +46,23 @@ class _ShopPageState extends State<ShopPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: new Text(widget.title),
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: ListView.builder(
           itemBuilder: _renderRow,
-          itemCount: list.length + 1,
+          itemCount: list.length ,
           controller: _scrollController,
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
   Widget _renderRow(BuildContext context, int index) {
     if (index < list.length) {
       return ListTile(
-        title: Text(list[index]),
+        title: Text('list[index]'),
       );
     }
     return _getMoreWidget();

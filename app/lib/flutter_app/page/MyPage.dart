@@ -25,7 +25,6 @@ class MyPage extends StatelessWidget {
 
 class PageWidget extends StatefulWidget {
   var parentContext;
-
   PageWidget(this.parentContext);
   @override
   State<StatefulWidget> createState() {

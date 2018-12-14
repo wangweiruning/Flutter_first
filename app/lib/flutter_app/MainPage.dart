@@ -91,7 +91,7 @@ class MainPageState extends State<MainPageWidget> {
     ];
 
     _bodys = [
-      new HomePage(),
+      new HomePage(context),
       new ShopPage(),
       new MsgPage(),
       new MyPage(context)

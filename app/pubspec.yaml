@@ -23,7 +23,7 @@ dependencies:
   cached_network_image: ^0.4.1
   dio: ^1.0.8
   json_annotation: ^0.2.3
-
+  flutter_webview_plugin: ^0.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
