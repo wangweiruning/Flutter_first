@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'ImageTapWidget.dart';
 class MsgPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: '智能小助手',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -14,7 +15,13 @@ class MsgPage extends StatelessWidget {
           child: new Text("消息"),
         ),
       ),
-        body: new Center(child:new Text("消息")),
+        body: new Center(child:new ImageTapWidget(
+          child: new Text("data"),
+          onTap:(){
+             print("3333333333333");
+          },
+          )
+          ),
       ),
     );
   }

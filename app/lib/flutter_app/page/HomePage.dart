@@ -1,12 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
+/**
+ * 
+ * 首页数据展示之加载和刷新
+ * 
+ * 
+ */
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:app/utils/HttpUtil.dart';
-import 'Demo1.dart';
 import 'NewsWebPage.dart';
+import 'MaterialTapWidget.dart';
 
-// import 'package:app/flutter_app/data_url/user.dart';
 Dio dio = new Dio();
 
 class HomePage extends StatefulWidget {
@@ -24,6 +27,14 @@ class HomeState extends State<HomePage> {
 
    List list = new List();
    ScrollController _scrollController = ScrollController(); //listview的控制器
+   String loadMoreText = "没有更多数据";
+   bool isend = false;
+   TextStyle loadMoreTextStyle =
+      new TextStyle(color: const Color(0xFF999999), fontSize: 14.0);
+   TextStyle titleStyle =
+      new TextStyle(color: const Color(0xFF757575), fontSize: 14.0);
+
+
   int _page = 1; //加载的页数
   bool isLoading = false; //是否正在加载数据
   @override
@@ -32,9 +43,25 @@ class HomeState extends State<HomePage> {
     //first time get data of one;
     _getMore();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==_scrollController.position.maxScrollExtent) {
+      var maxScroll = _scrollController.position.maxScrollExtent;
+      var pixel = _scrollController.position.pixels;
+
+      if (maxScroll == pixel && list.length < 40) {
         print('滑动到了最底部');
+
+        setState(() {
+          loadMoreText = "正在加载中...";
+          loadMoreTextStyle =
+              new TextStyle(color: const Color(0xFF4483f6), fontSize: 14.0);
+        });
         _getMore();
+      }else{
+        setState(() {
+          isend =true;
+          loadMoreText = "没有更多数据";
+          loadMoreTextStyle =
+              new TextStyle(color: const Color(0xFF999999), fontSize: 14.0);
+        });
       }
     });
   }
@@ -60,6 +87,24 @@ class HomeState extends State<HomePage> {
     } 
   }
 
+
+
+/**
+   * 加载更多进度条
+   */
+  Widget _buildProgressMoreIndicator() {
+    return  Padding(
+      padding: EdgeInsets.all(1.0),
+      child: new Center(
+        child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Text(loadMoreText, style: loadMoreTextStyle),
+      ),
+        // child: new Text(loadMoreText, style: loadMoreTextStyle),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var item = list;
@@ -82,22 +127,29 @@ class HomeState extends State<HomePage> {
                       var item_list = item[index];
                       var link = item_list['link'];
                       var tiltes = item_list['title'];
+                      if (index == item.length-1) {
+                    return _buildProgressMoreIndicator();
+                  } else {
                       return
                       new GestureDetector(
-                        onTap:(){
+                        child: new Container(
+                          decoration: new BoxDecoration(
+                          border: new Border.all(color: Colors.blueGrey, width: 2.0,),
+                          borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+                          gradient: new LinearGradient(colors: [Colors.blue, Colors.green]),
+                        ),
+                        child: new MaterialTapWidget(
+                          onTap: (){
+                          new Timer(const Duration(milliseconds: 500), () {
                             Navigator.of(widget.parentContext).push(
                                 new MaterialPageRoute(builder: (context) {
                                      return new NewsWebPage(link,tiltes,);
                                 },
                             ));
+                            });
+                          
                           },
-                        child: new Container(
-                          decoration: new BoxDecoration(
-                          border: new Border.all(color: Colors.blueGrey, width: 2.0,),
-                          borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-                          // gradient: new LinearGradient(colors: [Colors.blue, Colors.green]),
-                        ),
-                        child:new Row(
+                          child:new Row(
                                 children: <Widget>[
                                   new Flexible(
                                       flex: 1,
@@ -119,6 +171,7 @@ class HomeState extends State<HomePage> {
                                                 "${item_list["desc"]}",
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 4,
+                                                style: TextStyle(color:Colors.white),
                                               )
                                             ],
                                           ) ,
@@ -141,19 +194,17 @@ class HomeState extends State<HomePage> {
                                  
                                 ],
                               ),
+                        )
                       ),
                       );
-                      
-                    }),
+                    }
+                    }
+                    ),
               )
 
         );
   }
 
-
-gotoInfo(){
-
-}
 /***
  * 点击跳转事件
  * ***/

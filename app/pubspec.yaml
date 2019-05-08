@@ -24,6 +24,7 @@ dependencies:
   dio: ^1.0.8
   json_annotation: ^0.2.3
   flutter_webview_plugin: ^0.2.1
+  flutter_calendar: ^0.0.8
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -37,6 +38,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
+     - images/splash_girl.png
      - images/ic_home_normal.png
      - images/ic_home_press.png
      - images/ic_shop_normal.png
